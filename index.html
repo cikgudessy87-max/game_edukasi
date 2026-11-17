@@ -1,0 +1,2913 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SIAGA SIBER: Selamatkan Layanan Digital Pendidikan!</title>
+    <!-- Google Fonts: Plus Jakarta Sans & Orbitron untuk nuansa futuristik bersih -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           VARIABEL TEMA & RESET CSS
+           Dominan Biru Tua & Biru Cerah (Identitas Kemendikdasmen),
+           Aksen Oranye/Merah (Bahaya), Kuning (Peringatan), Hijau/Sian (Aman)
+           ========================================================================== */
+        :root {
+            --bg-deep: #050d1a;
+            --bg-navy: #0a192f;
+            --bg-card: rgba(16, 36, 68, 0.85);
+            --bg-card-solid: #102444;
+            --primary-blue: #0077ff;
+            --bright-cyan: #00d2ff;
+            --kemendik-blue: #005bbb;
+            --kemendik-yellow: #ffc700;
+            --danger-red: #ff3b30;
+            --danger-orange: #ff7b00;
+            --warning-yellow: #ffcc00;
+            --safe-green: #00e676;
+            --text-light: #f0f6fc;
+            --text-muted: #94a3b8;
+            --border-glow: rgba(0, 210, 255, 0.35);
+            --shadow-cyber: 0 8px 32px rgba(0, 119, 255, 0.25);
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-cyber: 'Orbitron', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        /* Kanvas Partikel Latar Belakang */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Kontainer Utama Aplikasi */
+        .app-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 1024px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 12px 16px;
+        }
+
+        /* ==========================================================================
+           KOMPONEN LOGO (LATAR PUTIH LEMBUT AGAR TERBACA JELAS & PROPORSIONAL)
+           ========================================================================== */
+        .logo-pill-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.96);
+            padding: 10px 20px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0, 210, 255, 0.25), inset 0 0 0 2px #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .logo-slot {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            height: 54px;
+            min-width: 120px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .logo-slot img {
+            max-height: 48px;
+            width: auto;
+            max-width: 200px;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Placeholder bertanda jelas "TEMPEL LOGO DI SINI" jika belum diganti file asli */
+        .logo-placeholder-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1.5px dashed #005bbb;
+            background: #f8fafc;
+            padding: 4px 10px;
+            border-radius: 8px;
+            color: #0f172a;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logo-placeholder-box:hover {
+            background: #e0f2fe;
+            border-color: #0077ff;
+        }
+
+        .logo-placeholder-text {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            line-height: 1.15;
+        }
+
+        .logo-placeholder-badge {
+            font-size: 9px;
+            font-weight: 800;
+            color: #d97706;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .logo-placeholder-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: #005bbb;
+        }
+
+        .logo-placeholder-sub {
+            font-size: 10px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        /* Logo Kecil di Pojok Atas Saat Permainan */
+        .hud-logo-mini {
+            background: rgba(255, 255, 255, 0.96);
+            padding: 4px 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            height: 38px;
+        }
+
+        .hud-logo-mini img {
+            max-height: 30px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* ==========================================================================
+           SISTEM LAYAR (SCREENS)
+           ========================================================================== */
+        .screen {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            animation: fadeInScreen 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeInScreen {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==========================================================================
+           BILAH STATUS (HUD PERMAINAN)
+           ========================================================================== */
+        .game-hud {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(10, 25, 47, 0.92);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-md);
+            padding: 8px 14px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-cyber);
+            backdrop-filter: blur(10px);
+            flex-wrap: wrap;
+            gap: 10px;
+            z-index: 20;
+        }
+
+        .game-hud.visible {
+            display: flex;
+        }
+
+        .hud-left, .hud-center, .hud-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hud-stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hud-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--bright-cyan);
+            font-weight: 700;
+        }
+
+        .hud-value {
+            font-family: var(--font-cyber);
+            font-size: 16px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .shields-container {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            margin-top: 2px;
+        }
+
+        .shield-icon {
+            width: 20px;
+            height: 22px;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 5px rgba(0, 210, 255, 0.6));
+        }
+
+        .shield-icon.lost {
+            opacity: 0.22;
+            filter: grayscale(100%);
+            transform: scale(0.85);
+        }
+
+        .level-pill {
+            background: linear-gradient(135deg, var(--kemendik-blue), var(--primary-blue));
+            border: 1px solid var(--bright-cyan);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-family: var(--font-cyber);
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 0 12px rgba(0, 210, 255, 0.3);
+        }
+
+        .btn-icon-top {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-light);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .btn-icon-top:hover {
+            background: rgba(0, 210, 255, 0.2);
+            border-color: var(--bright-cyan);
+        }
+
+        /* ==========================================================================
+           LAYAR AWAL (HOME SCREEN)
+           ========================================================================== */
+        .hero-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-lg);
+            padding: 24px 20px;
+            margin: auto 0;
+            text-align: center;
+            box-shadow: var(--shadow-cyber);
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 200%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--bright-cyan), var(--kemendik-yellow), var(--bright-cyan), transparent);
+            animation: scanlineGlow 4s infinite linear;
+        }
+
+        @keyframes scanlineGlow {
+            0% { transform: translateX(-25%); }
+            100% { transform: translateX(25%); }
+        }
+
+        .cyber-badge-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 210, 255, 0.12);
+            border: 1px solid rgba(0, 210, 255, 0.4);
+            color: var(--bright-cyan);
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-top: 16px;
+            margin-bottom: 10px;
+        }
+
+        .game-title {
+            font-family: var(--font-cyber);
+            font-size: clamp(24px, 5vw, 40px);
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(180deg, #ffffff 0%, #7dd3fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 24px rgba(0, 119, 255, 0.4);
+            margin-bottom: 6px;
+        }
+
+        .game-subtitle {
+            font-size: clamp(15px, 2.5vw, 20px);
+            font-weight: 700;
+            color: var(--kemendik-yellow);
+            margin-bottom: 14px;
+        }
+
+        .game-desc {
+            max-width: 680px;
+            margin: 0 auto 20px;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        /* Visual Perisai Berkilau di Tengah */
+        .hero-shield-visual {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 18px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: floatShield 3s ease-in-out infinite;
+        }
+
+        @keyframes floatShield {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Input Nama Pemain */
+        .player-input-box {
+            max-width: 420px;
+            margin: 0 auto 20px;
+            text-align: left;
+        }
+
+        .player-input-box label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--bright-cyan);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .cyber-input {
+            width: 100%;
+            padding: 13px 16px;
+            background: rgba(5, 13, 26, 0.8);
+            border: 2px solid rgba(0, 210, 255, 0.4);
+            border-radius: var(--radius-md);
+            color: #fff;
+            font-family: var(--font-main);
+            font-size: 15px;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.25s;
+        }
+
+        .cyber-input:focus {
+            border-color: var(--kemendik-yellow);
+            box-shadow: 0 0 16px rgba(255, 199, 0, 0.3);
+        }
+
+        /* Tombol Utama & Sekunder */
+        .btn-group-main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            cursor: pointer;
+            font-family: var(--font-main);
+            font-weight: 800;
+            font-size: 15px;
+            padding: 13px 26px;
+            border-radius: var(--radius-md);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0077ff 0%, #00c6ff 100%);
+            color: #ffffff;
+            box-shadow: 0 6px 20px rgba(0, 198, 255, 0.4), inset 0 1px 0 rgba(255,255,255,0.4);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 25px rgba(0, 210, 255, 0.65);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-light);
+            border: 1.5px solid var(--border-glow);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 210, 255, 0.15);
+            border-color: var(--bright-cyan);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.35);
+        }
+
+        .footer-logo-bar {
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-helper-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-tiny-link {
+            background: rgba(0, 210, 255, 0.15);
+            border: 1px solid rgba(0, 210, 255, 0.4);
+            color: var(--bright-cyan);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* ==========================================================================
+           LEVEL 1: KENALI ANCAMAN (SERANGAN JATUH KE SERVER SEKOLAH)
+           ========================================================================== */
+        .level-header-banner {
+            background: rgba(16, 36, 68, 0.9);
+            border-left: 4px solid var(--bright-cyan);
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .level-header-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--bright-cyan);
+        }
+
+        .level-header-sub {
+            font-size: 12px;
+            color: #cbd5e1;
+        }
+
+        .lv1-arena {
+            position: relative;
+            flex: 1;
+            min-height: 290px;
+            max-height: 380px;
+            background: radial-gradient(circle at 50% 90%, rgba(0, 119, 255, 0.22), rgba(5, 13, 26, 0.95));
+            border: 1.5px solid var(--border-glow);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin-bottom: 12px;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Grid Siber Perspektif di Arena Level 1 */
+        .lv1-arena::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(0, 210, 255, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 210, 255, 0.07) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+        }
+
+        /* Kartu Ancaman yang Jatuh */
+        .falling-threat-card {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(92%, 540px);
+            background: linear-gradient(135deg, rgba(40, 12, 20, 0.95), rgba(20, 15, 35, 0.96));
+            border: 2px solid var(--danger-orange);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            box-shadow: 0 8px 28px rgba(255, 59, 48, 0.45);
+            z-index: 5;
+            transition: border-color 0.2s;
+        }
+
+        .falling-threat-card.danger-near {
+            border-color: var(--danger-red);
+            animation: pulseDanger 0.5s infinite alternate;
+        }
+
+        @keyframes pulseDanger {
+            from { box-shadow: 0 0 15px rgba(255, 59, 48, 0.5); }
+            to { box-shadow: 0 0 30px rgba(255, 59, 48, 0.95); }
+        }
+
+        .threat-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--warning-yellow);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .threat-card-desc {
+            font-size: clamp(13px, 2.2vw, 15px);
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        /* Kubah Perisai & Server Sekolah di Dasar Arena */
+        .server-base-zone {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 62px;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 119, 255, 0.25) 100%);
+            border-top: 2px dashed rgba(0, 210, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            z-index: 4;
+        }
+
+        .server-base-zone.shield-flash {
+            background: linear-gradient(180deg, rgba(0, 230, 118, 0.35), rgba(0, 210, 255, 0.55));
+            border-top: 3px solid var(--safe-green);
+            box-shadow: 0 -10px 30px rgba(0, 230, 118, 0.6);
+        }
+
+        .server-base-zone.hit-flash {
+            background: linear-gradient(180deg, rgba(255, 59, 48, 0.45), rgba(255, 0, 0, 0.65));
+            border-top: 3px solid var(--danger-red);
+        }
+
+        .server-label {
+            font-family: var(--font-cyber);
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--bright-cyan);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Tombol Zona Jawaban 6 Ancaman */
+        .threat-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 640px) {
+            .threat-buttons-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .btn-threat-zone {
+            background: linear-gradient(180deg, #132d54 0%, #0b1d38 100%);
+            border: 1.5px solid rgba(0, 210, 255, 0.4);
+            border-radius: var(--radius-md);
+            padding: 12px 10px;
+            color: #ffffff;
+            font-family: var(--font-main);
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 4px;
+            min-height: 64px;
+            transition: all 0.15s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-threat-zone:hover {
+            border-color: var(--kemendik-yellow);
+            background: linear-gradient(180deg, #1b3d70 0%, #10284c 100%);
+            transform: translateY(-2px);
+        }
+
+        .btn-threat-zone:active {
+            transform: scale(0.96);
+        }
+
+        .btn-threat-zone .zone-icon {
+            font-size: 18px;
+        }
+
+        /* ==========================================================================
+           LEVEL 2: PASANG PERTAHANAN (BENTENG 6 LAPIS + DRAG & DROP / KLIK)
+           ========================================================================== */
+        .lv2-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.35fr;
+            gap: 14px;
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .lv2-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .fortress-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .fortress-visual-title {
+            font-family: var(--font-cyber);
+            font-size: 13px;
+            color: var(--bright-cyan);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .fortress-layers-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .fortress-layer-item {
+            background: rgba(5, 13, 26, 0.6);
+            border: 1px dashed rgba(148, 163, 184, 0.35);
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.35s ease;
+        }
+
+        .fortress-layer-item.built {
+            background: linear-gradient(90deg, rgba(0, 230, 118, 0.2), rgba(0, 119, 255, 0.25));
+            border: 1px solid var(--safe-green);
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(0, 230, 118, 0.25);
+        }
+
+        .fortress-dropzone {
+            border: 2px dashed var(--bright-cyan);
+            background: rgba(0, 210, 255, 0.08);
+            border-radius: var(--radius-md);
+            padding: 14px 10px;
+            text-align: center;
+            transition: all 0.25s;
+            cursor: pointer;
+        }
+
+        .fortress-dropzone.drag-over {
+            background: rgba(255, 199, 0, 0.2);
+            border-color: var(--kemendik-yellow);
+            transform: scale(1.02);
+        }
+
+        .scenario-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .incident-alert-box {
+            background: rgba(255, 123, 0, 0.12);
+            border-left: 4px solid var(--danger-orange);
+            padding: 12px 14px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+        }
+
+        .incident-tag {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--warning-yellow);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .incident-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .defense-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .defense-option-card {
+            background: rgba(16, 36, 68, 0.95);
+            border: 1.5px solid rgba(0, 210, 255, 0.35);
+            border-radius: 10px;
+            padding: 11px 13px;
+            color: var(--text-light);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: grab;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .defense-option-card:hover {
+            border-color: var(--kemendik-yellow);
+            background: rgba(24, 52, 96, 0.95);
+            transform: translateX(3px);
+        }
+
+        .defense-option-card:active {
+            cursor: grabbing;
+        }
+
+        .drag-handle-badge {
+            background: rgba(0, 210, 255, 0.2);
+            color: var(--bright-cyan);
+            padding: 3px 7px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ==========================================================================
+           LEVEL 3: TANGGAP INSIDEN (PUSAT KOMANDO - URUTKAN KARTU & KUIS KANAL)
+           ========================================================================== */
+        .command-center-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .crisis-monitor {
+            background: linear-gradient(135deg, rgba(45, 10, 18, 0.9), rgba(15, 23, 42, 0.95));
+            border: 1.5px solid var(--danger-red);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            position: relative;
+        }
+
+        .crisis-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--danger-red);
+            font-family: var(--font-cyber);
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .blink-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--danger-red);
+            border-radius: 50%;
+            display: inline-block;
+            animation: blinkAnim 0.8s infinite alternate;
+        }
+
+        @keyframes blinkAnim {
+            from { opacity: 1; box-shadow: 0 0 8px var(--danger-red); }
+            to { opacity: 0.2; }
+        }
+
+        .sortable-cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .seq-card {
+            background: rgba(15, 34, 64, 0.95);
+            border: 1.5px solid rgba(0, 210, 255, 0.35);
+            border-radius: 10px;
+            padding: 11px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .seq-card.selected-swap {
+            border-color: var(--kemendik-yellow);
+            background: rgba(255, 199, 0, 0.12);
+            box-shadow: 0 0 15px rgba(255, 199, 0, 0.25);
+        }
+
+        .seq-num-badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: var(--primary-blue);
+            color: #fff;
+            font-family: var(--font-cyber);
+            font-weight: 800;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .seq-card-text {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .seq-controls {
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .btn-seq-move {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-seq-move:hover:not(:disabled) {
+            background: var(--primary-blue);
+            border-color: var(--bright-cyan);
+        }
+
+        .btn-seq-move:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+        }
+
+        /* Pilihan Ganda Level 3 */
+        .mcq-options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-mcq-option {
+            background: rgba(15, 34, 64, 0.95);
+            border: 1.5px solid rgba(0, 210, 255, 0.35);
+            border-radius: 10px;
+            padding: 13px 16px;
+            color: #fff;
+            font-family: var(--font-main);
+            font-size: 14px;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-mcq-option:hover {
+            border-color: var(--kemendik-yellow);
+            background: rgba(25, 55, 100, 0.95);
+        }
+
+        .mcq-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: rgba(0, 210, 255, 0.2);
+            color: var(--bright-cyan);
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* ==========================================================================
+           MODAL UMPAN BALIK, TRANSISI LEVEL, DAN CARA BERMAIN
+           ========================================================================== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 9, 20, 0.85);
+            backdrop-filter: blur(6px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+            animation: fadeInModal 0.22s ease-out;
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-card {
+            background: var(--bg-card-solid);
+            border: 2px solid var(--border-glow);
+            border-radius: var(--radius-lg);
+            max-width: 540px;
+            width: 100%;
+            padding: 22px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-card.correct-state {
+            border-color: var(--safe-green);
+            box-shadow: 0 0 35px rgba(0, 230, 118, 0.3);
+        }
+
+        .modal-card.wrong-state {
+            border-color: var(--danger-red);
+            box-shadow: 0 0 35px rgba(255, 59, 48, 0.35);
+        }
+
+        .feedback-icon-badge {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 900;
+        }
+
+        .correct-state .feedback-icon-badge {
+            background: rgba(0, 230, 118, 0.2);
+            color: var(--safe-green);
+            border: 2px solid var(--safe-green);
+        }
+
+        .wrong-state .feedback-icon-badge {
+            background: rgba(255, 59, 48, 0.2);
+            color: var(--danger-red);
+            border: 2px solid var(--danger-red);
+        }
+
+        .feedback-title {
+            font-family: var(--font-cyber);
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .feedback-explanation {
+            font-size: 14px;
+            color: #e2e8f0;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        /* ==========================================================================
+           LAYAR HASIL AKHIR & PENUTUP
+           ========================================================================== */
+        .result-card {
+            background: var(--bg-card);
+            border: 1.5px solid var(--border-glow);
+            border-radius: var(--radius-lg);
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: var(--shadow-cyber);
+            margin: auto 0;
+        }
+
+        .stars-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 12px 0;
+            font-size: 38px;
+        }
+
+        .star-item {
+            color: #334155;
+            transition: all 0.4s;
+        }
+
+        .star-item.earned {
+            color: var(--kemendik-yellow);
+            filter: drop-shadow(0 0 12px rgba(255, 199, 0, 0.7));
+            animation: popStar 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popStar {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        .badge-rank-box {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(0, 119, 255, 0.25), rgba(0, 210, 255, 0.15));
+            border: 2px solid var(--kemendik-yellow);
+            border-radius: 14px;
+            padding: 10px 24px;
+            margin-bottom: 16px;
+        }
+
+        .badge-rank-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--bright-cyan);
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .badge-rank-name {
+            font-family: var(--font-cyber);
+            font-size: clamp(18px, 3.5vw, 26px);
+            font-weight: 900;
+            color: var(--kemendik-yellow);
+        }
+
+        .review-box {
+            text-align: left;
+            background: rgba(5, 13, 26, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            margin: 14px 0;
+            max-height: 210px;
+            overflow-y: auto;
+        }
+
+        .review-box h4 {
+            font-size: 13px;
+            color: var(--warning-yellow);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .review-list {
+            padding-left: 18px;
+            font-size: 13px;
+            color: #cbd5e1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .closing-mandate-banner {
+            background: linear-gradient(135deg, rgba(0, 91, 187, 0.4), rgba(0, 210, 255, 0.15));
+            border: 1.5px solid var(--bright-cyan);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .closing-headline {
+            font-family: var(--font-cyber);
+            font-size: clamp(15px, 2.5vw, 19px);
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .closing-sub {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--kemendik-yellow);
+            margin-bottom: 8px;
+        }
+
+        .closing-source {
+            font-size: 12px;
+            color: #e2e8f0;
+            background: rgba(0, 0, 0, 0.35);
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* Utilitas Teks & Spasi */
+        .text-left { text-align: left; }
+        .mt-2 { margin-top: 8px; }
+        .mb-2 { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+    <!-- Kanvas Animasi Partikel Siber -->
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="app-wrapper">
+        
+        <!-- ==================================================================
+             BILAH STATUS PERMAINAN (HUD) - MUNCUL SAAT LEVEL 1, 2, 3
+             ================================================================== -->
+        <header id="game-hud" class="game-hud">
+            <div class="hud-left">
+                <!-- Logo Kemendikdasmen Kecil di Pojok Atas Layar Permainan -->
+                <div class="hud-logo-mini" title="Kemendikdasmen">
+                    <img class="img-logo-kemendikdasmen" alt="Logo Kemendikdasmen" src="">
+                </div>
+                <div class="hud-stat">
+                    <span class="hud-label" id="hud-player-name">PENDIDIK SIBER</span>
+                    <span class="level-pill" id="hud-level-badge">LEVEL 1</span>
+                </div>
+            </div>
+
+            <div class="hud-center">
+                <div class="hud-stat">
+                    <span class="hud-label">Integritas Sistem (5 Perisai)</span>
+                    <div class="shields-container" id="hud-shields">
+                        <!-- 5 ikon perisai di-render oleh JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="hud-right">
+                <div class="hud-stat" style="text-align: right;">
+                    <span class="hud-label">Skor</span>
+                    <span class="hud-value" id="hud-score">0</span>
+                </div>
+                <div class="hud-stat" style="text-align: right; min-width: 54px;">
+                    <span class="hud-label">Waktu</span>
+                    <span class="hud-value" id="hud-timer">00:00</span>
+                </div>
+                <button class="btn-icon-top" id="btn-mute" title="Suara Aktif/Bisu" aria-label="Toggle Suara">
+                    🔊
+                </button>
+            </div>
+        </header>
+
+        <!-- ==================================================================
+             LAYAR AWAL (HOME SCREEN)
+             ================================================================== -->
+        <section id="screen-start" class="screen active">
+            <div class="hero-card">
+                
+                <!-- HEADER LOGO: Kemendikdasmen & #PendidikanBermutuUntukSemua -->
+                <div class="logo-pill-container" aria-label="Header Logo Resmi">
+                    <div class="logo-slot" onclick="openLogoManagerModal()" title="Klik untuk mengganti/menempel logo">
+                        <img class="img-logo-kemendikdasmen" alt="Logo Kemendikdasmen" src="">
+                    </div>
+                    <div class="logo-slot" onclick="openLogoManagerModal()" title="Klik untuk mengganti/menempel logo">
+                        <img class="img-logo-tagar" alt="#PendidikanBermutuUntukSemua" src="">
+                    </div>
+                </div>
+
+                <div class="cyber-badge-top">
+                    <span>🛡️ SIMULASI EDUKASI KEAMANAN SIBER PENDIDIKAN</span>
+                </div>
+
+                <h1 class="game-title">SIAGA SIBER</h1>
+                <h2 class="game-subtitle">Selamatkan Layanan Digital Pendidikan!</h2>
+                <p class="game-desc">
+                    Misi interaktif bagi Pendidik, Tenaga Kependidikan, dan Pengelola Sistem Elektronik Pendidikan untuk mengenali ancaman, memasang pertahanan, dan merespons insiden siber dengan tepat.
+                </p>
+
+                <!-- Ilustrasi Perisai Siber Futuristik -->
+                <div class="hero-shield-visual">
+                    <svg viewBox="0 0 100 115" width="85" height="95">
+                        <defs>
+                            <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#00d2ff" />
+                                <stop offset="50%" stop-color="#0077ff" />
+                                <stop offset="100%" stop-color="#003c8f" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M50 5 L92 22 L92 54 C92 82 50 106 50 108 C50 106 8 82 8 54 L8 22 Z" 
+                              fill="url(#shieldGrad)" stroke="#ffc700" stroke-width="3" />
+                        <path d="M50 15 L82 28 L82 53 C82 74 50 94 50 96 C50 94 18 74 18 53 L18 28 Z" 
+                              fill="rgba(5, 13, 26, 0.55)" stroke="#00d2ff" stroke-width="1.5" />
+                        <path d="M38 54 L46 62 L64 42" fill="none" stroke="#00e676" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+
+                <!-- Input Nama Pemain -->
+                <div class="player-input-box">
+                    <label for="input-player-name">Nama Petugas / Satuan Pendidikan:</label>
+                    <input type="text" id="input-player-name" class="cyber-input" placeholder="Masukkan nama Anda (contoh: Budi - Operator Sekolah)" maxlength="40">
+                </div>
+
+                <!-- Tombol Aksi Utama -->
+                <div class="btn-group-main">
+                    <button class="btn btn-primary" id="btn-start-game">
+                        🚀 MULAI MISI SEKARANG
+                    </button>
+                    <button class="btn btn-secondary" id="btn-how-to-play">
+                        📖 CARA BERMAIN
+                    </button>
+                </div>
+
+                <!-- FOOTER LOGO: Kemendikdasmen RAMAH -->
+                <div class="footer-logo-bar">
+                    <div class="logo-pill-container" style="padding: 8px 18px;">
+                        <div class="logo-slot" onclick="openLogoManagerModal()" title="Klik untuk mengganti/menempel logo">
+                            <img class="img-logo-ramah" alt="Logo Kemendikdasmen RAMAH" src="">
+                        </div>
+                    </div>
+                    <div class="logo-helper-hint">
+                        <span>📌 Ingin memasang file gambar ke-3 logo asli Anda?</span>
+                        <button type="button" class="btn-tiny-link" onclick="openLogoManagerModal()">
+                            TEMPEL LOGO DI SINI (Upload / Base64)
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================================================================
+             LAYAR LEVEL 1: KENALI ANCAMAN (Cyber Threat Awareness)
+             ================================================================== -->
+        <section id="screen-level1" class="screen">
+            <div class="level-header-banner">
+                <div>
+                    <div class="level-header-title">LEVEL 1: KENALI ANCAMAN (Cyber Threat Awareness)</div>
+                    <div class="level-header-sub">Cocokkan deskripsi serangan yang jatuh dengan tombol ancaman yang tepat sebelum menghantam Server Sekolah!</div>
+                </div>
+                <div class="level-pill" id="lv1-progress">Ancaman: 1 / 6</div>
+            </div>
+
+            <!-- Arena Jatuhnya Kartu Ancaman -->
+            <div class="lv1-arena" id="lv1-arena">
+                <div class="falling-threat-card" id="lv1-falling-card" style="top: 12px;">
+                    <div class="threat-card-header">
+                        <span>⚠️ SINYAL SERANGAN TERDETEKSI</span>
+                        <span id="lv1-speed-indicator">KECEPATAN: NORMAL</span>
+                    </div>
+                    <div class="threat-card-desc" id="lv1-threat-desc">
+                        Memuat deskripsi ancaman...
+                    </div>
+                </div>
+
+                <!-- Server Sekolah di Bawah Arena -->
+                <div class="server-base-zone" id="lv1-server-base">
+                    <div class="server-label">
+                        <span>🛡️ PERISAI SERVER SEKOLAH & LAYANAN PENDIDIKAN</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6 Tombol Zona Jawaban Ancaman -->
+            <div class="threat-buttons-grid" id="lv1-buttons-grid">
+                <!-- Di-render dinamis oleh JS -->
+            </div>
+        </section>
+
+        <!-- ==================================================================
+             LAYAR LEVEL 2: PASANG PERTAHANAN (Cyber Security Protection)
+             ================================================================== -->
+        <section id="screen-level2" class="screen">
+            <div class="level-header-banner">
+                <div>
+                    <div class="level-header-title">LEVEL 2: PASANG PERTAHANAN (Cyber Security Protection)</div>
+                    <div class="level-header-sub">Tarik (Drag & Drop) atau Klik langkah mitigasi yang tepat ke zona Benteng Pertahanan!</div>
+                </div>
+                <div class="level-pill" id="lv2-progress">Skenario: 1 / 12</div>
+            </div>
+
+            <div class="lv2-layout">
+                <!-- Panel Benteng Pertahanan 6 Lapis -->
+                <div class="fortress-panel">
+                    <div>
+                        <div class="fortress-visual-title">🏰 BENTENG PERTAHANAN SIBER (6 LAPIS)</div>
+                        <div class="fortress-layers-stack" id="lv2-fortress-stack">
+                            <!-- 6 Lapis Benteng -->
+                        </div>
+                    </div>
+
+                    <div class="fortress-dropzone" id="lv2-dropzone">
+                        <div style="font-size: 24px; margin-bottom: 4px;">🛡️📥</div>
+                        <div style="font-weight: 800; font-size: 13px; color: var(--bright-cyan);">
+                            ZONA PASANG BENTENG
+                        </div>
+                        <div style="font-size: 11px; color: #cbd5e1;">
+                            Tarik kartu jawaban ke sini atau klik langsung pilihan di samping/bawah.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Skenario & Pilihan Langkah -->
+                <div class="scenario-panel">
+                    <div>
+                        <div class="incident-alert-box">
+                            <span class="incident-tag">🚨 SKENARIO KERENTANAN / INSIDEN</span>
+                            <p class="incident-text" id="lv2-scenario-text">
+                                Memuat skenario...
+                            </p>
+                        </div>
+                        <p style="font-size: 12px; color: var(--bright-cyan); font-weight: 700; margin-bottom: 10px;">
+                            Pilih Langkah Mitigasi yang Paling Tepat:
+                        </p>
+                        <div class="defense-options-list" id="lv2-options-list">
+                            <!-- Pilihan di-render oleh JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================================================================
+             LAYAR LEVEL 3: TANGGAP INSIDEN (Incident Response)
+             ================================================================== -->
+        <section id="screen-level3" class="screen">
+            <div class="level-header-banner">
+                <div>
+                    <div class="level-header-title">LEVEL 3: TANGGAP INSIDEN (Pusat Komando)</div>
+                    <div class="level-header-sub" id="lv3-sub-instruction">Susun prosedur penanganan insiden dan gunakan kanal pelaporan resmi!</div>
+                </div>
+                <div class="level-pill" id="lv3-progress">Tahap: 1 / 9</div>
+            </div>
+
+            <div class="command-center-box">
+                <!-- Monitor Indikasi Insiden -->
+                <div class="crisis-monitor">
+                    <div class="crisis-header">
+                        <span class="blink-dot"></span>
+                        <span id="lv3-monitor-type">INDIKASI INSIDEN SIBER TERDETEKSI</span>
+                    </div>
+                    <p class="incident-text" id="lv3-prompt-text">
+                        Memuat simulasi pusat komando...
+                    </p>
+                </div>
+
+                <!-- Kontainer Dinamis: Bisa Mode Urutkan Kartu (Bagian A) atau Kuis Kanal Pelaporan (Bagian B) -->
+                <div id="lv3-interactive-area">
+                    <!-- Di-render oleh JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================================================================
+             LAYAR HASIL AKHIR & PENUTUP (RESULT SCREEN)
+             ================================================================== -->
+        <section id="screen-result" class="screen">
+            <div class="result-card">
+                <div class="cyber-badge-top" style="margin-top: 0;">
+                    🏁 LAPORAN AKHIR MISI KEAMANAN SIBER
+                </div>
+
+                <h2 class="game-title" style="font-size: clamp(22px, 4vw, 32px);" id="res-player-greeting">
+                    SELAMAT, PETUGAS SIBER!
+                </h2>
+
+                <!-- Bintang 1 - 3 -->
+                <div class="stars-row" id="res-stars-row">
+                    <span class="star-item">★</span>
+                    <span class="star-item">★</span>
+                    <span class="star-item">★</span>
+                </div>
+
+                <!-- Lencana Peringkat -->
+                <div class="badge-rank-box">
+                    <div class="badge-rank-label">LENCANA KEHORMATAN</div>
+                    <div class="badge-rank-name" id="res-badge-name">KOMANDAN SIAGA</div>
+                </div>
+
+                <!-- Statistik Skor & Integritas -->
+                <div style="display: flex; justify-content: center; gap: 24px; margin-bottom: 14px; flex-wrap: wrap;">
+                    <div>
+                        <div class="hud-label">TOTAL SKOR</div>
+                        <div class="hud-value" style="font-size: 24px; color: var(--kemendik-yellow);" id="res-final-score">0</div>
+                    </div>
+                    <div>
+                        <div class="hud-label">SISA INTEGRITAS SISTEM</div>
+                        <div class="hud-value" style="font-size: 24px; color: var(--safe-green);" id="res-final-shields">5 / 5</div>
+                    </div>
+                    <div>
+                        <div class="hud-label">WAKTU TEMPUH</div>
+                        <div class="hud-value" style="font-size: 24px;" id="res-final-time">00:00</div>
+                    </div>
+                </div>
+
+                <!-- Ringkasan Poin yang Perlu Dipelajari Lagi -->
+                <div class="review-box">
+                    <h4>📋 Ringkasan Evaluasi & Poin Pembelajaran:</h4>
+                    <ul class="review-list" id="res-review-list">
+                        <!-- Diisi oleh JS -->
+                    </ul>
+                </div>
+
+                <!-- Pesan Penutup & Sumber Surat BSSN -->
+                <div class="closing-mandate-banner">
+                    <div class="closing-headline">WASPADA, SIAGA, DAN RESPONSIF!</div>
+                    <div class="closing-sub">Keamanan Siber Pendidikan adalah Tanggung Jawab Bersama.</div>
+                    <div class="closing-source">
+                        Sumber: Surat BSSN Nomor 8408/BSSN/D3/KS.01.02/11/2026, tanggal 10 November 2026.
+                    </div>
+                </div>
+
+                <div class="btn-group-main" style="margin-bottom: 12px;">
+                    <button class="btn btn-primary" id="btn-play-again">
+                        🔄 MAIN LAGI
+                    </button>
+                </div>
+
+                <!-- Footer Logo Kemendikdasmen RAMAH di Layar Hasil Akhir -->
+                <div class="footer-logo-bar">
+                    <div class="logo-pill-container" style="padding: 8px 18px;">
+                        <div class="logo-slot" onclick="openLogoManagerModal()">
+                            <img class="img-logo-ramah" alt="Logo Kemendikdasmen RAMAH" src="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ======================================================================
+         MODAL UMPAN BALIK JAWABAN & TRANSISI LEVEL
+         ====================================================================== -->
+    <div class="modal-overlay" id="modal-feedback">
+        <div class="modal-card" id="modal-feedback-card">
+            <div class="feedback-icon-badge" id="fb-icon">✓</div>
+            <h3 class="feedback-title" id="fb-title">JAWABAN TEPAT!</h3>
+            <p class="feedback-explanation" id="fb-explanation">
+                Penjelasan singkat materi...
+            </p>
+            <button class="btn btn-primary" id="btn-fb-continue" style="width: 100%;">
+                LANJUTKAN ➡️
+            </button>
+        </div>
+    </div>
+
+    <!-- ======================================================================
+         MODAL CARA BERMAIN
+         ====================================================================== -->
+    <div class="modal-overlay" id="modal-howto">
+        <div class="modal-card text-left">
+            <h3 class="feedback-title" style="color: var(--bright-cyan); text-align: center;">
+                📖 PANDUAN MISI SIAGA SIBER
+            </h3>
+            <div style="font-size: 13px; color: #e2e8f0; display: flex; flex-direction: column; gap: 10px; margin: 14px 0;">
+                <div style="background: rgba(255,255,255,0.05); padding: 10px 12px; border-radius: 8px;">
+                    <strong style="color: var(--kemendik-yellow);">🎯 LEVEL 1 - KENALI ANCAMAN:</strong>
+                    <p>Kartu serangan siber akan jatuh menuju Server Sekolah. Pilih salah satu dari 6 tombol jenis ancaman (DDoS, Phishing, Penyebaran Hoaks, Defacement, Eksploitasi Kerentanan, Pembajakan DNS) sebelum kartu menyentuh server!</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 10px 12px; border-radius: 8px;">
+                    <strong style="color: var(--kemendik-yellow);">🏰 LEVEL 2 - PASANG PERTAHANAN:</strong>
+                    <p>Baca skenario insiden, lalu tarik (Drag & Drop) atau klik langkah mitigasi yang tepat ke Benteng Pertahanan hingga ke-6 lapis benteng terbangun penuh.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 10px 12px; border-radius: 8px;">
+                    <strong style="color: var(--kemendik-yellow);">🚨 LEVEL 3 - TANGGAP INSIDEN:</strong>
+                    <p>Di Pusat Komando, urutkan 4 kartu tindakan tanggap insiden dengan benar dan jawab 5 soal kanal pelaporan resmi Kemendikdasmen & Gov-CSIRT BSSN.</p>
+                </div>
+                <div style="background: rgba(0, 210, 255, 0.1); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-glow);">
+                    <strong>🛡️ INTEGRITAS SISTEM & LENCANA:</strong>
+                    <p>Anda dibekali 5 Perisai Integritas Sistem. Pertahankan skor dan perisai untuk meraih lencana tertinggi: <em>Penjaga Siber</em>, <em>Pelindung Data</em>, atau <em>Komandan Siaga</em>!</p>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="closeHowToModal()" style="width: 100%;">
+                SIAP LAKSANAKAN MISI!
+            </button>
+        </div>
+    </div>
+
+    <!-- ======================================================================
+         MODAL PENGELOLA LOGO (UPLOAD LANGSUNG ATAU TEMPEL BASE64)
+         ====================================================================== -->
+    <div class="modal-overlay" id="modal-logo-manager">
+        <div class="modal-card text-left">
+            <h3 class="feedback-title" style="color: var(--kemendik-yellow); text-align: center;">
+                🖼️ TEMPEL / GANTI 3 LOGO RESMI
+            </h3>
+            <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 14px; text-align: center;">
+                Anda dapat memilih file gambar logo dari perangkat Anda di bawah ini (otomatis diubah ke Base64 dan disimpan), atau mengganti variabel <code>LOGO_BASE64</code> di dalam kode HTML.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+                <div style="background: rgba(255,255,255,0.06); padding: 10px 12px; border-radius: 8px;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--bright-cyan); display: block; margin-bottom: 4px;">
+                        1. Logo Kemendikdasmen (Header & Pojok Atas Game)
+                    </label>
+                    <input type="file" accept="image/*" onchange="handleLogoUpload(event, 'kemendikdasmen')" style="font-size: 12px; color: #fff; width: 100%;">
+                </div>
+
+                <div style="background: rgba(255,255,255,0.06); padding: 10px 12px; border-radius: 8px;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--bright-cyan); display: block; margin-bottom: 4px;">
+                        2. Logo #PendidikanBermutuUntukSemua (Header Layar Awal)
+                    </label>
+                    <input type="file" accept="image/*" onchange="handleLogoUpload(event, 'tagar')" style="font-size: 12px; color: #fff; width: 100%;">
+                </div>
+
+                <div style="background: rgba(255,255,255,0.06); padding: 10px 12px; border-radius: 8px;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--bright-cyan); display: block; margin-bottom: 4px;">
+                        3. Logo Kemendikdasmen RAMAH (Footer Awal & Akhir)
+                    </label>
+                    <input type="file" accept="image/*" onchange="handleLogoUpload(event, 'ramah')" style="font-size: 12px; color: #fff; width: 100%;">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" onclick="resetDefaultLogos()" style="flex: 1; padding: 10px;">
+                    Reset Placeholder
+                </button>
+                <button class="btn btn-primary" onclick="closeLogoManagerModal()" style="flex: 1; padding: 10px;">
+                    SELESAI & SIMPAN
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           1. KONFIGURASI 3 LOGO (BASE64 EMBEDDED / PLACEHOLDER BERTANDA JELAS)
+           --------------------------------------------------------------------------
+           PETUNJUK PENEMPELAN LOGO DI KODE HTML:
+           Jika Anda ingin menanamkan string Base64 gambar asli secara permanen di kode,
+           ganti isi string pada objek LOGO_CONFIG di bawah ini dengan:
+           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+           Atau cukup klik tombol "TEMPEL LOGO DI SINI" langsung di layar awal game!
+           ========================================================================== */
+        
+        // Pembuat SVG Base64 otomatis bertanda jelas "TEMPEL LOGO DI SINI" beserta visual identitas
+        function createPlaceholderLogoDataURI(type) {
+            let svgContent = '';
+            if (type === 'kemendikdasmen') {
+                svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="250" height="68" viewBox="0 0 250 68">
+                    <rect width="248" height="66" x="1" y="1" rx="8" fill="#ffffff" stroke="#005bbb" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <circle cx="34" cy="34" r="22" fill="#005bbb"/>
+                    <path d="M22 38 C28 45, 40 45, 46 38 L42 24 L34 18 L26 24 Z" fill="#ffc700"/>
+                    <path d="M25 42 Q34 49 43 42" stroke="#ffffff" stroke-width="2.5" fill="none"/>
+                    <text x="64" y="21" font-family="Plus Jakarta Sans, sans-serif" font-size="8.5" font-weight="800" fill="#d97706">[TEMPEL LOGO DI SINI]</text>
+                    <text x="64" y="38" font-family="Plus Jakarta Sans, sans-serif" font-size="14" font-weight="800" fill="#005bbb">KEMENDIKDASMEN</text>
+                    <text x="64" y="52" font-family="Plus Jakarta Sans, sans-serif" font-size="9.5" font-weight="600" fill="#334155">Kementerian Pendidikan Dasar &amp; Menengah</text>
+                </svg>`;
+            } else if (type === 'tagar') {
+                svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="265" height="68" viewBox="0 0 265 68">
+                    <rect width="263" height="66" x="1" y="1" rx="8" fill="#ffffff" stroke="#0077ff" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <rect x="12" y="16" width="36" height="36" rx="8" fill="#0077ff"/>
+                    <text x="30" y="42" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="24" font-weight="900" fill="#ffc700">#</text>
+                    <text x="58" y="21" font-family="Plus Jakarta Sans, sans-serif" font-size="8.5" font-weight="800" fill="#d97706">[TEMPEL LOGO DI SINI]</text>
+                    <text x="58" y="37" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="800" fill="#005bbb">#PendidikanBermutu</text>
+                    <text x="58" y="52" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="800" fill="#0284c7">UntukSemua</text>
+                </svg>`;
+            } else {
+                svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="250" height="68" viewBox="0 0 250 68">
+                    <rect width="248" height="66" x="1" y="1" rx="8" fill="#ffffff" stroke="#005bbb" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <rect x="12" y="14" width="40" height="40" rx="8" fill="#005bbb"/>
+                    <text x="32" y="39" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="900" fill="#ffffff">RAMAH</text>
+                    <text x="62" y="21" font-family="Plus Jakarta Sans, sans-serif" font-size="8.5" font-weight="800" fill="#d97706">[TEMPEL LOGO DI SINI]</text>
+                    <text x="62" y="37" font-family="Plus Jakarta Sans, sans-serif" font-size="12.5" font-weight="800" fill="#005bbb">Kemendikdasmen</text>
+                    <text x="62" y="53" font-family="Plus Jakarta Sans, sans-serif" font-size="15" font-weight="900" fill="#0284c7" letter-spacing="1">R A M A H</text>
+                </svg>`;
+            }
+            return "data:image/svg+xml;utf8," + encodeURIComponent(svgContent);
+        }
+
+        // Objek Penyimpanan Base64 3 Logo Wajib
+        const DEFAULT_LOGOS = {
+            // === TEMPEL BASE64 LOGO 1 (KEMENDIKDASMEN) DI BAWAH INI ===
+            kemendikdasmen: createPlaceholderLogoDataURI('kemendikdasmen'),
+            // === TEMPEL BASE64 LOGO 2 (#PendidikanBermutuUntukSemua) DI BAWAH INI ===
+            tagar: createPlaceholderLogoDataURI('tagar'),
+            // === TEMPEL BASE64 LOGO 3 (KEMENDIKDASMEN RAMAH) DI BAWAH INI ===
+            ramah: createPlaceholderLogoDataURI('ramah')
+        };
+
+        let activeLogos = { ...DEFAULT_LOGOS };
+
+        function loadSavedLogos() {
+            try {
+                const saved = localStorage.getItem('siaga_siber_logos_v1');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    activeLogos = { ...DEFAULT_LOGOS, ...parsed };
+                }
+            } catch (e) {
+                activeLogos = { ...DEFAULT_LOGOS };
+            }
+            applyLogosToDOM();
+        }
+
+        function applyLogosToDOM() {
+            document.querySelectorAll('.img-logo-kemendikdasmen').forEach(img => {
+                img.src = activeLogos.kemendikdasmen;
+            });
+            document.querySelectorAll('.img-logo-tagar').forEach(img => {
+                img.src = activeLogos.tagar;
+            });
+            document.querySelectorAll('.img-logo-ramah').forEach(img => {
+                img.src = activeLogos.ramah;
+            });
+        }
+
+        function handleLogoUpload(event, key) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                activeLogos[key] = e.target.result;
+                try {
+                    localStorage.setItem('siaga_siber_logos_v1', JSON.stringify(activeLogos));
+                } catch (err) {
+                    // Abaikan jika ukuran melebihi kuota storage lokal
+                }
+                applyLogosToDOM();
+                playSound('correct');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function resetDefaultLogos() {
+            activeLogos = { ...DEFAULT_LOGOS };
+            try {
+                localStorage.removeItem('siaga_siber_logos_v1');
+            } catch (e) {}
+            applyLogosToDOM();
+        }
+
+        function openLogoManagerModal() {
+            document.getElementById('modal-logo-manager').classList.add('open');
+        }
+
+        function closeLogoManagerModal() {
+            document.getElementById('modal-logo-manager').classList.remove('open');
+        }
+
+        /* ==========================================================================
+           2. DATABASE MATERI RESMI (SESUAI 100% DENGAN ISI FLYER / MATERI)
+           ========================================================================== */
+
+        // LEVEL 1: 6 Jenis Ancaman Siber
+        const THREAT_DATA_LV1 = [
+            {
+                id: 'ddos',
+                name: 'DDoS',
+                icon: '🌊',
+                desc: 'Gangguan akses/ketersediaan situs dan layanan pendidikan akibat serangan trafik berlebih.',
+                explanation: 'DDoS adalah gangguan akses/ketersediaan situs dan layanan pendidikan akibat serangan trafik berlebih.'
+            },
+            {
+                id: 'phishing',
+                name: 'Phishing',
+                icon: '🎣',
+                desc: 'Surel, pesan, atau tautan palsu yang mencuri akun dan kata sandi pengguna, termasuk akun belajar maupun akun kedinasan.',
+                explanation: 'Phishing menggunakan surel, pesan, atau tautan palsu untuk mencuri akun dan kata sandi pengguna, termasuk akun belajar maupun akun kedinasan.'
+            },
+            {
+                id: 'hoaks',
+                name: 'Penyebaran Hoaks',
+                icon: '📢',
+                desc: 'Informasi palsu tentang layanan/institusi pendidikan yang menimbulkan keresahan dan disinformasi.',
+                explanation: 'Penyebaran Hoaks merupakan informasi palsu tentang layanan/institusi pendidikan yang menimbulkan keresahan dan disinformasi.'
+            },
+            {
+                id: 'defacement',
+                name: 'Defacement',
+                icon: '🎨',
+                desc: 'Perubahan tampilan situs web satuan pendidikan atau instansi tanpa izin.',
+                explanation: 'Defacement adalah perubahan tampilan situs web satuan pendidikan atau instansi tanpa izin.'
+            },
+            {
+                id: 'eksploitasi',
+                name: 'Eksploitasi Kerentanan',
+                icon: '🔓',
+                desc: 'Pemanfaatan celah keamanan pada aplikasi, server, atau sistem pendukung layanan pendidikan.',
+                explanation: 'Eksploitasi Kerentanan adalah pemanfaatan celah keamanan pada aplikasi, server, atau sistem pendukung layanan pendidikan.'
+            },
+            {
+                id: 'dns',
+                name: 'Pembajakan DNS',
+                icon: '🧭',
+                desc: 'Pengalihan domain situs/layanan pendidikan ke alamat tidak sah.',
+                explanation: 'Pembajakan DNS adalah pengalihan domain situs/layanan pendidikan ke alamat tidak sah.'
+            }
+        ];
+
+        // LEVEL 2: 6 Langkah Pertahanan & 12 Skenario (2 skenario per langkah)
+        const DEFENSE_STEPS_LV2 = [
+            {
+                stepId: 1,
+                shortTitle: 'Siagakan Tim Tanggap Insiden Siber (TTIS/CSIRT)',
+                fullText: 'Siagakan Tim Tanggap Insiden Siber (TTIS/CSIRT): petugas siaga, narahubung teknis, jalur eskalasi.'
+            },
+            {
+                stepId: 2,
+                shortTitle: 'Amankan akun hak akses tinggi (2FA & Sandi)',
+                fullText: 'Amankan akun hak akses tinggi: aktifkan 2FA dan perbarui kata sandi admin situs/aplikasi, hosting, DNS, registrar domain, platform pembelajaran.'
+            },
+            {
+                stepId: 3,
+                shortTitle: 'Perbarui sistem yang terhubung ke internet',
+                fullText: 'Perbarui sistem yang terhubung ke internet: CMS, plugin, aplikasi, OS, server web; nonaktifkan modul/akun/layanan yang tidak dipakai.'
+            },
+            {
+                stepId: 4,
+                shortTitle: 'Lindungi layanan digital (WAF & Proteksi DDoS)',
+                fullText: 'Lindungi layanan digital: WAF dan proteksi DDoS aktif; siapkan kontak darurat ISP/hosting.'
+            },
+            {
+                stepId: 5,
+                shortTitle: 'Siapkan cadangan dan uji pemulihan',
+                fullText: 'Siapkan cadangan dan uji pemulihan: cadangan berkala, simpan terpisah dari sistem utama, uji pemulihan.'
+            },
+            {
+                stepId: 6,
+                shortTitle: 'Tingkatkan pemantauan & kewaspadaan pengguna',
+                fullText: 'Tingkatkan pemantauan: aktifkan log keamanan, tinjau berkala, batasi akses log; jangan buka tautan/lampiran mencurigakan, jangan bagikan kata sandi atau OTP, verifikasi lewat kanal resmi.'
+            }
+        ];
+
+        const SCENARIOS_LV2 = [
+            // Langkah 1 (2 Skenario)
+            {
+                stepId: 1,
+                scenario: 'Satuan pendidikan belum memiliki jadwal petugas jaga keamanan siber dan bingung harus menghubungi siapa saat terjadi insiden di luar jam kerja.',
+                explanation: 'Siagakan Tim Tanggap Insiden Siber (TTIS/CSIRT): petugas siaga, narahubung teknis, dan jalur eskalasi.'
+            },
+            {
+                stepId: 1,
+                scenario: 'Ketika terjadi gangguan sistem elektronik pendidikan, pengelola teknis tidak memiliki alur koordinasi dan narahubung darurat untuk eskalasi masalah.',
+                explanation: 'Siagakan Tim Tanggap Insiden Siber (TTIS/CSIRT): petugas siaga, narahubung teknis, dan jalur eskalasi.'
+            },
+            // Langkah 2 (2 Skenario)
+            {
+                stepId: 2,
+                scenario: 'Akun administrator situs web sekolah, panel hosting, dan platform pembelajaran masih menggunakan kata sandi lama tanpa verifikasi dua langkah.',
+                explanation: 'Amankan akun hak akses tinggi: aktifkan 2FA dan perbarui kata sandi admin situs/aplikasi, hosting, DNS, registrar domain, platform pembelajaran.'
+            },
+            {
+                stepId: 2,
+                scenario: 'Pengelola sistem baru menyadari akun pengelola DNS dan registrar domain satuan pendidikan belum dilindungi autentikasi dua faktor (2FA).',
+                explanation: 'Amankan akun hak akses tinggi: aktifkan 2FA dan perbarui kata sandi admin situs/aplikasi, hosting, DNS, registrar domain, platform pembelajaran.'
+            },
+            // Langkah 3 (2 Skenario)
+            {
+                stepId: 3,
+                scenario: 'Situs satuan pendidikan masih menggunakan versi CMS, plugin, dan sistem operasi server web lawas serta banyak modul lama yang tidak terpakai namun tetap aktif.',
+                explanation: 'Perbarui sistem yang terhubung ke internet: CMS, plugin, aplikasi, OS, server web; nonaktifkan modul/akun/layanan yang tidak dipakai.'
+            },
+            {
+                stepId: 3,
+                scenario: 'Ditemukan akun uji coba dan layanan tambahan pada server aplikasi pendidikan yang sudah tidak digunakan lagi tetapi masih terbuka ke internet.',
+                explanation: 'Perbarui sistem yang terhubung ke internet: CMS, plugin, aplikasi, OS, server web; nonaktifkan modul/akun/layanan yang tidak dipakai.'
+            },
+            // Langkah 4 (2 Skenario)
+            {
+                stepId: 4,
+                scenario: 'Portal layanan pendidikan mengalami lonjakan trafik mencurigakan yang berpotensi melumpuhkan server, sementara belum ada filter aplikasi web dan nomor darurat penyedia layanan.',
+                explanation: 'Lindungi layanan digital: WAF dan proteksi DDoS aktif; siapkan kontak darurat ISP/hosting.'
+            },
+            {
+                stepId: 4,
+                scenario: 'Pengelola sistem ingin memastikan situs web layanan pendidikan terlindung dari serangan aplikasi web serta memiliki jalur cepat ke ISP/hosting saat trafik membludak.',
+                explanation: 'Lindungi layanan digital: WAF dan proteksi DDoS aktif; siapkan kontak darurat ISP/hosting.'
+            },
+            // Langkah 5 (2 Skenario)
+            {
+                stepId: 5,
+                scenario: 'Data layanan pendidikan hanya disimpan di dalam server utama yang sama dan belum pernah dilakukan pengujian apakah cadangan data tersebut dapat dipulihkan.',
+                explanation: 'Siapkan cadangan dan uji pemulihan: cadangan berkala, simpan terpisah dari sistem utama, uji pemulihan.'
+            },
+            {
+                stepId: 5,
+                scenario: 'Untuk mengantisipasi kerusakan data akibat insiden siber, pengelola sistem perlu mengatur strategi pencadangan berkala yang aman dan teruji.',
+                explanation: 'Siapkan cadangan dan uji pemulihan: cadangan berkala, simpan terpisah dari sistem utama, uji pemulihan.'
+            },
+            // Langkah 6 (2 Skenario)
+            {
+                stepId: 6,
+                scenario: 'Pencatatan aktivitas (log) keamanan server belum diaktifkan dan banyak staf menerima pesan mencurigakan yang meminta kode OTP serta tautan tidak dikenal.',
+                explanation: 'Tingkatkan pemantauan: aktifkan log keamanan, tinjau berkala, batasi akses log; jangan buka tautan/lampiran mencurigakan, jangan bagikan kata sandi atau OTP, verifikasi lewat kanal resmi.'
+            },
+            {
+                stepId: 6,
+                scenario: 'Log keamanan sistem dapat diakses sembarang orang dan belum ditinjau rutin, serta pengguna belum terbiasa memverifikasi informasi melalui kanal resmi.',
+                explanation: 'Tingkatkan pemantauan: aktifkan log keamanan, tinjau berkala, batasi akses log; jangan buka tautan/lampiran mencurigakan, jangan bagikan kata sandi atau OTP, verifikasi lewat kanal resmi.'
+            }
+        ];
+
+        // LEVEL 3 BAGIAN A: 4 Indikasi Insiden & 4 Urutan Tindakan Tanggap Insiden
+        const INCIDENT_INDICATIONS_LV3 = [
+            {
+                title: 'INDIKASI INSIDEN 1: SITUS TIDAK BISA DIAKSES',
+                prompt: 'Situs web dan layanan digital satuan pendidikan tiba-tiba tidak bisa diakses oleh pendidik maupun peserta didik. Susun urutan tindakan tanggap insiden yang benar!'
+            },
+            {
+                title: 'INDIKASI INSIDEN 2: TAMPILAN BERUBAH TANPA IZIN',
+                prompt: 'Halaman depan situs web satuan pendidikan berubah tampilan tanpa izin (Defacement). Susun urutan tindakan tanggap insiden yang benar!'
+            },
+            {
+                title: 'INDIKASI INSIDEN 3: AKTIVITAS AKUN TIDAK DIKENAL',
+                prompt: 'Ditemukan aktivitas masuk dan perubahan pengaturan dari akun tidak dikenal pada sistem elektronik pendidikan. Susun urutan tindakan yang benar!'
+            },
+            {
+                title: 'INDIKASI INSIDEN 4: INDIKASI KEBOCORAN DATA',
+                prompt: 'Muncul indikasi kebocoran data pada layanan aplikasi pendidikan. Susun urutan tindakan tanggap insiden dari langkah ke-1 hingga ke-4!'
+            }
+        ];
+
+        const ORDERED_RESPONSE_STEPS_LV3 = [
+            {
+                order: 1,
+                text: 'Jangan hapus bukti atau mengubah apa pun yang menghilangkan jejak.'
+            },
+            {
+                order: 2,
+                text: 'Amankan bukti awal: tangkapan layar, waktu kejadian, alamat situs/IP terdampak, log relevan.'
+            },
+            {
+                order: 3,
+                text: 'Catat nama dan kontak pelapor, satuan kerja, uraian kejadian, kronologi, dampak layanan.'
+            },
+            {
+                order: 4,
+                text: 'Laporkan ke petugas/TTIS di instansi, lalu koordinasikan lewat kanal resmi dan ikuti arahan tim.'
+            }
+        ];
+
+        // LEVEL 3 BAGIAN B: 5 Soal Pilihan Ganda Kanal Pelaporan Resmi
+        const REPORTING_QUIZ_LV3 = [
+            {
+                question: 'Ke manakah alamat portal resmi Sistem Pelaporan Insiden Siber Kemendikdasmen yang digunakan untuk melaporkan insiden siber pendidikan?',
+                options: [
+                    'https://respon.kemendikdasmen.go.id',
+                    'https://lapor-siber.kemendikdasmen.id',
+                    'https://csirt-publik.pendidikan.go.id',
+                    'https://bantuan-akun.kemendikdasmen.go.id'
+                ],
+                correctIndex: 0,
+                explanation: 'Portal resmi Sistem Pelaporan Insiden Siber Kemendikdasmen dapat diakses melalui https://respon.kemendikdasmen.go.id.'
+            },
+            {
+                question: 'Selain ke TTIS Kemendikdasmen, pelaporan dan koordinasi insiden siber sektor pemerintah juga dapat disampaikan ke Gov-CSIRT Indonesia melalui alamat surel (email) resmi yaitu...',
+                options: [
+                    'govcsirt@bssn.go.id',
+                    'pengaduan@govcsirt.id',
+                    'helpdesk.siber@kominfo.go.id',
+                    'admin.csirt@bssn.id'
+                ],
+                correctIndex: 0,
+                explanation: 'Alamat email resmi Gov-CSIRT Indonesia untuk pelaporan insiden siber adalah govcsirt@bssn.go.id.'
+            },
+            {
+                question: 'Berapakah nomor kontak WhatsApp resmi Gov-CSIRT Indonesia yang dapat dihubungi saat melaporkan insiden siber?',
+                options: [
+                    '+62 851-2312-3940',
+                    '+62 811-0000-1122',
+                    '+62 812-9988-7766',
+                    '+62 852-1111-2222'
+                ],
+                correctIndex: 0,
+                explanation: 'Nomor WhatsApp resmi Gov-CSIRT Indonesia adalah +62 851-2312-3940.'
+            },
+            {
+                question: 'Data dan informasi apa saja yang wajib dicatat terkait pelapor dan kejadian sebelum/saat menyampaikan laporan ke petugas/TTIS di instansi?',
+                options: [
+                    'Nama dan kontak pelapor, satuan kerja, uraian kejadian, kronologi, dampak layanan',
+                    'Hanya nama domain situs web tanpa perlu mencantumkan kronologi dan dampak layanan',
+                    'Kata sandi pribadi seluruh pengguna dan kode OTP admin untuk dikirim lewat grup pesan',
+                    'Menghapus seluruh log kejadian terlebih dahulu agar server terlihat bersih'
+                ],
+                correctIndex: 0,
+                explanation: 'Saat tanggap insiden, catat nama dan kontak pelapor, satuan kerja, uraian kejadian, kronologi, serta dampak layanan.'
+            },
+            {
+                question: 'Apa tindakan pertama yang wajib dipatuhi pengelola sistem saat menemukan bukti awal insiden (seperti tangkapan layar, waktu kejadian, alamat situs/IP terdampak, dan log relevan)?',
+                options: [
+                    'Jangan hapus bukti atau mengubah apa pun yang menghilangkan jejak, lalu amankan bukti awal tersebut',
+                    'Segera memformat ulang seluruh server agar jejak serangan hilang sebelum dilaporkan',
+                    'Mengubah konfigurasi log dan menghapus file mencurigakan tanpa mendokumentasikan bukti awal',
+                    'Membagikan tangkapan layar bukti insiden ke media sosial pribadi sebelum melapor ke TTIS'
+                ],
+                correctIndex: 0,
+                explanation: 'Jangan hapus bukti atau mengubah apa pun yang menghilangkan jejak, serta amankan bukti awal (tangkapan layar, waktu kejadian, alamat situs/IP terdampak, log relevan).'
+            }
+        ];
+
+        /* ==========================================================================
+           3. SISTEM AUDIO SYNTHESIZER (WEB AUDIO API TANPA FILE EKSTERNAL)
+           ========================================================================== */
+        let audioCtx = null;
+        let isMuted = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    audioCtx = new AudioContextClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSound(type) {
+            if (isMuted) return;
+            initAudio();
+            if (!audioCtx) return;
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(520, now);
+                osc.frequency.exponentialRampToValueAtTime(780, now + 0.06);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'correct') {
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.065);
+                    gain.gain.setValueAtTime(0.16, now + idx * 0.065);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.065 + 0.18);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.065);
+                    osc.stop(now + idx * 0.065 + 0.18);
+                });
+            } else if (type === 'wrong') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.linearRampToValueAtTime(130, now + 0.28);
+                gain.gain.setValueAtTime(0.18, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'levelup') {
+                const notes = [440, 554.37, 659.25, 880];
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.09);
+                    gain.gain.setValueAtTime(0.2, now + idx * 0.09);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.09 + 0.25);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.09);
+                    osc.stop(now + idx * 0.09 + 0.25);
+                });
+            }
+        }
+
+        document.getElementById('btn-mute').addEventListener('click', () => {
+            isMuted = !isMuted;
+            document.getElementById('btn-mute').textContent = isMuted ? '🔇' : '🔊';
+            if (!isMuted) playSound('click');
+        });
+
+        /* ==========================================================================
+           4. UTILITAS ACAK & STATE PERMAINAN UTAMA
+           ========================================================================== */
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        const gameState = {
+            playerName: 'Petugas Siaga',
+            score: 0,
+            shields: 5,
+            maxShields: 5,
+            currentLevel: 1,
+            elapsedSeconds: 0,
+            timerInterval: null,
+            isPaused: false,
+            mistakesReview: new Set(),
+
+            // State Level 1
+            lv1Queue: [],
+            lv1Index: 0,
+            lv1CardY: 12,
+            lv1BaseSpeed: 0.55,
+            lv1AnimFrame: null,
+
+            // State Level 2
+            lv2Queue: [],
+            lv2Index: 0,
+            lv2BuiltSteps: new Set(),
+
+            // State Level 3
+            lv3Tasks: [],
+            lv3Index: 0,
+            lv3CurrentSeqOrder: [],
+            lv3SelectedSwapIdx: null
+        };
+
+        /* ==========================================================================
+           5. PENGATUR HUD, TIMER, DAN UMPAN BALIK (MODAL)
+           ========================================================================== */
+        function updateHUD() {
+            document.getElementById('hud-player-name').textContent = gameState.playerName;
+            document.getElementById('hud-level-badge').textContent = `LEVEL ${gameState.currentLevel}`;
+            document.getElementById('hud-score').textContent = gameState.score;
+
+            const shieldsBox = document.getElementById('hud-shields');
+            shieldsBox.innerHTML = '';
+            for (let i = 0; i < gameState.maxShields; i++) {
+                const isAlive = i < gameState.shields;
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('viewBox', '0 0 24 28');
+                svg.setAttribute('class', `shield-icon ${isAlive ? '' : 'lost'}`);
+                svg.innerHTML = `<path d="M12 1 L22 5.5 L22 13.5 C22 20.5 12 26.5 12 27 C12 26.5 2 20.5 2 13.5 L2 5.5 Z" 
+                    fill="${isAlive ? '#00d2ff' : '#475569'}" stroke="#ffffff" stroke-width="1.5"/>`;
+                shieldsBox.appendChild(svg);
+            }
+        }
+
+        function startGlobalTimer() {
+            stopGlobalTimer();
+            gameState.timerInterval = setInterval(() => {
+                if (!gameState.isPaused) {
+                    gameState.elapsedSeconds++;
+                    const mins = String(Math.floor(gameState.elapsedSeconds / 60)).padStart(2, '0');
+                    const secs = String(gameState.elapsedSeconds % 60).padStart(2, '0');
+                    document.getElementById('hud-timer').textContent = `${mins}:${secs}`;
+                }
+            }, 1000);
+        }
+
+        function stopGlobalTimer() {
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+                gameState.timerInterval = null;
+            }
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+
+            const hud = document.getElementById('game-hud');
+            if (screenId === 'screen-start' || screenId === 'screen-result') {
+                hud.classList.remove('visible');
+            } else {
+                hud.classList.add('visible');
+            }
+        }
+
+        let feedbackCallback = null;
+
+        function showFeedbackModal(isCorrect, title, explanation, nextCallback) {
+            gameState.isPaused = true;
+            const modal = document.getElementById('modal-feedback');
+            const card = document.getElementById('modal-feedback-card');
+            const icon = document.getElementById('fb-icon');
+            const titleEl = document.getElementById('fb-title');
+            const expEl = document.getElementById('fb-explanation');
+
+            card.className = 'modal-card ' + (isCorrect ? 'correct-state' : 'wrong-state');
+            icon.textContent = isCorrect ? '🛡️' : '⚠️';
+            titleEl.textContent = title;
+            titleEl.style.color = isCorrect ? 'var(--safe-green)' : 'var(--danger-red)';
+            expEl.textContent = explanation;
+
+            feedbackCallback = nextCallback;
+            modal.classList.add('open');
+        }
+
+        document.getElementById('btn-fb-continue').addEventListener('click', () => {
+            playSound('click');
+            document.getElementById('modal-feedback').classList.remove('open');
+            gameState.isPaused = false;
+            if (typeof feedbackCallback === 'function') {
+                const cb = feedbackCallback;
+                feedbackCallback = null;
+                cb();
+            }
+        });
+
+        /* ==========================================================================
+           6. LOGIKA LEVEL 1: KENALI ANCAMAN (SERANGAN JATUH)
+           ========================================================================== */
+        function initLevel1() {
+            gameState.currentLevel = 1;
+            updateHUD();
+            showScreen('screen-level1');
+
+            // Acak urutan ke-6 kartu ancaman
+            gameState.lv1Queue = shuffleArray(THREAT_DATA_LV1);
+            gameState.lv1Index = 0;
+
+            // Render 6 tombol zona jawaban ancaman
+            const grid = document.getElementById('lv1-buttons-grid');
+            grid.innerHTML = '';
+            const shuffledButtons = shuffleArray(THREAT_DATA_LV1);
+            shuffledButtons.forEach(threat => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-threat-zone';
+                btn.innerHTML = `
+                    <span class="zone-icon">${threat.icon}</span>
+                    <span>${threat.name}</span>
+                `;
+                btn.addEventListener('click', () => handleLevel1Answer(threat.id));
+                grid.appendChild(btn);
+            });
+
+            spawnNextLevel1Threat();
+            startLevel1Loop();
+        }
+
+        function spawnNextLevel1Threat() {
+            if (gameState.lv1Index >= gameState.lv1Queue.length) {
+                finishLevel1();
+                return;
+            }
+            const currentThreat = gameState.lv1Queue[gameState.lv1Index];
+            document.getElementById('lv1-progress').textContent = `Ancaman: ${gameState.lv1Index + 1} / ${gameState.lv1Queue.length}`;
+            document.getElementById('lv1-threat-desc').textContent = `"${currentThreat.desc}"`;
+
+            // Kecepatan naik bertahap setiap soal
+            const speedLevel = gameState.lv1Index + 1;
+            const speedLabels = ['NORMAL', 'SEDANG', 'CEPAT', 'TINGGI', 'SIAGA', 'KRITIS'];
+            document.getElementById('lv1-speed-indicator').textContent = `KECEPATAN: ${speedLabels[gameState.lv1Index] || 'TINGGI'}`;
+
+            gameState.lv1CardY = 12;
+            gameState.lv1BaseSpeed = 0.42 + (gameState.lv1Index * 0.11);
+
+            const card = document.getElementById('lv1-falling-card');
+            card.style.top = `${gameState.lv1CardY}px`;
+            card.classList.remove('danger-near');
+        }
+
+        function startLevel1Loop() {
+            if (gameState.lv1AnimFrame) cancelAnimationFrame(gameState.lv1AnimFrame);
+
+            function step() {
+                if (gameState.currentLevel !== 1) return;
+
+                if (!gameState.isPaused) {
+                    const arena = document.getElementById('lv1-arena');
+                    const card = document.getElementById('lv1-falling-card');
+                    const serverBase = document.getElementById('lv1-server-base');
+
+                    const maxFallY = arena.clientHeight - serverBase.clientHeight - card.offsetHeight - 4;
+                    gameState.lv1CardY += gameState.lv1BaseSpeed;
+
+                    if (gameState.lv1CardY > maxFallY * 0.65) {
+                        card.classList.add('danger-near');
+                    }
+
+                    if (gameState.lv1CardY >= maxFallY) {
+                        // Mengenai Server Sekolah!
+                        handleLevel1TimeoutHit();
+                    } else {
+                        card.style.top = `${gameState.lv1CardY}px`;
+                    }
+                }
+                gameState.lv1AnimFrame = requestAnimationFrame(step);
+            }
+            gameState.lv1AnimFrame = requestAnimationFrame(step);
+        }
+
+        function handleLevel1Answer(selectedId) {
+            if (gameState.isPaused) return;
+            const currentThreat = gameState.lv1Queue[gameState.lv1Index];
+            const serverBase = document.getElementById('lv1-server-base');
+
+            if (selectedId === currentThreat.id) {
+                playSound('correct');
+                gameState.score += 100;
+                updateHUD();
+
+                serverBase.classList.add('shield-flash');
+                setTimeout(() => serverBase.classList.remove('shield-flash'), 500);
+
+                showFeedbackModal(
+                    true,
+                    `PERISAI AKTIF! (+100 Poin)`,
+                    currentThreat.explanation,
+                    () => {
+                        gameState.lv1Index++;
+                        spawnNextLevel1Threat();
+                    }
+                );
+            } else {
+                playSound('wrong');
+                gameState.shields = Math.max(0, gameState.shields - 1);
+                gameState.mistakesReview.add(`Kenali Ancaman (${currentThreat.name}): ${currentThreat.explanation}`);
+                updateHUD();
+
+                serverBase.classList.add('hit-flash');
+                setTimeout(() => serverBase.classList.remove('hit-flash'), 500);
+
+                showFeedbackModal(
+                    false,
+                    `INTEGRITAS SISTEM BERKURANG!`,
+                    `Jawaban yang benar adalah ${currentThreat.name}. ${currentThreat.explanation}`,
+                    () => {
+                        gameState.lv1Index++;
+                        spawnNextLevel1Threat();
+                    }
+                );
+            }
+        }
+
+        function handleLevel1TimeoutHit() {
+            const currentThreat = gameState.lv1Queue[gameState.lv1Index];
+            const serverBase = document.getElementById('lv1-server-base');
+
+            playSound('wrong');
+            gameState.shields = Math.max(0, gameState.shields - 1);
+            gameState.mistakesReview.add(`Kenali Ancaman (${currentThreat.name}): ${currentThreat.explanation}`);
+            updateHUD();
+
+            serverBase.classList.add('hit-flash');
+            setTimeout(() => serverBase.classList.remove('hit-flash'), 500);
+
+            showFeedbackModal(
+                false,
+                `SERANGAN MENGENAI SERVER SEKOLAH!`,
+                `Ancaman tersebut adalah ${currentThreat.name}. ${currentThreat.explanation}`,
+                () => {
+                    gameState.lv1Index++;
+                    spawnNextLevel1Threat();
+                }
+            );
+        }
+
+        function finishLevel1() {
+            if (gameState.lv1AnimFrame) cancelAnimationFrame(gameState.lv1AnimFrame);
+            playSound('levelup');
+            showFeedbackModal(
+                true,
+                `LEVEL 1 SELESAI!`,
+                `Waspadai setiap potensi ancaman. Lindungi sistem, aplikasi, situs web, dan data pendidikan.`,
+                () => {
+                    initLevel2();
+                }
+            );
+        }
+
+        /* ==========================================================================
+           7. LOGIKA LEVEL 2: PASANG PERTAHANAN (12 SKENARIO & BENTENG 6 LAPIS)
+           ========================================================================== */
+        function initLevel2() {
+            gameState.currentLevel = 2;
+            updateHUD();
+            showScreen('screen-level2');
+
+            // Acak 12 skenario (2 skenario per langkah pertahanan)
+            gameState.lv2Queue = shuffleArray(SCENARIOS_LV2);
+            gameState.lv2Index = 0;
+            gameState.lv2BuiltSteps = new Set();
+
+            renderFortressStack();
+            setupDropzoneEvents();
+            loadLevel2Scenario();
+        }
+
+        function renderFortressStack() {
+            const stack = document.getElementById('lv2-fortress-stack');
+            stack.innerHTML = '';
+            DEFENSE_STEPS_LV2.forEach(step => {
+                const isBuilt = gameState.lv2BuiltSteps.has(step.stepId);
+                const div = document.createElement('div');
+                div.className = `fortress-layer-item ${isBuilt ? 'built' : ''}`;
+                div.innerHTML = `
+                    <span>${isBuilt ? '🛡️' : '⚪'}</span>
+                    <span>Lapis ${step.stepId}: ${step.shortTitle}</span>
+                `;
+                stack.appendChild(div);
+            });
+        }
+
+        function setupDropzoneEvents() {
+            const dropzone = document.getElementById('lv2-dropzone');
+            dropzone.ondragover = (e) => {
+                e.preventDefault();
+                dropzone.classList.add('drag-over');
+            };
+            dropzone.ondragleave = () => {
+                dropzone.classList.remove('drag-over');
+            };
+            dropzone.ondrop = (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('drag-over');
+                const stepId = parseInt(e.dataTransfer.getData('text/plain'), 10);
+                if (!isNaN(stepId)) {
+                    handleLevel2Answer(stepId);
+                }
+            };
+        }
+
+        function loadLevel2Scenario() {
+            if (gameState.lv2Index >= gameState.lv2Queue.length) {
+                finishLevel2();
+                return;
+            }
+
+            const currentItem = gameState.lv2Queue[gameState.lv2Index];
+            document.getElementById('lv2-progress').textContent = `Skenario: ${gameState.lv2Index + 1} / ${gameState.lv2Queue.length}`;
+            document.getElementById('lv2-scenario-text').textContent = currentItem.scenario;
+
+            // Buat 4 pilihan langkah mitigasi (1 benar + 3 pengecoh acak dari 6 langkah resmi)
+            const correctStep = DEFENSE_STEPS_LV2.find(s => s.stepId === currentItem.stepId);
+            const otherSteps = shuffleArray(DEFENSE_STEPS_LV2.filter(s => s.stepId !== currentItem.stepId)).slice(0, 3);
+            const options = shuffleArray([correctStep, ...otherSteps]);
+
+            const listEl = document.getElementById('lv2-options-list');
+            listEl.innerHTML = '';
+
+            options.forEach(opt => {
+                const card = document.createElement('div');
+                card.className = 'defense-option-card';
+                card.setAttribute('draggable', 'true');
+                card.innerHTML = `
+                    <span class="drag-handle-badge">⠿ PASANG</span>
+                    <span>${opt.fullText}</span>
+                `;
+
+                card.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', String(opt.stepId));
+                });
+
+                card.addEventListener('click', () => {
+                    handleLevel2Answer(opt.stepId);
+                });
+
+                listEl.appendChild(card);
+            });
+        }
+
+        function handleLevel2Answer(selectedStepId) {
+            if (gameState.isPaused) return;
+            const currentItem = gameState.lv2Queue[gameState.lv2Index];
+
+            if (selectedStepId === currentItem.stepId) {
+                playSound('correct');
+                gameState.score += 100;
+                gameState.lv2BuiltSteps.add(currentItem.stepId);
+                updateHUD();
+                renderFortressStack();
+
+                showFeedbackModal(
+                    true,
+                    `LAPIS BENTENG TERPASANG! (+100 Poin)`,
+                    currentItem.explanation,
+                    () => {
+                        gameState.lv2Index++;
+                        loadLevel2Scenario();
+                    }
+                );
+            } else {
+                playSound('wrong');
+                gameState.shields = Math.max(0, gameState.shields - 1);
+                gameState.mistakesReview.add(`Pasang Pertahanan: ${currentItem.explanation}`);
+                updateHUD();
+
+                showFeedbackModal(
+                    false,
+                    `LANGKAH MITIGASI KURANG TEPAT!`,
+                    `Langkah yang tepat: ${currentItem.explanation}`,
+                    () => {
+                        gameState.lv2Index++;
+                        loadLevel2Scenario();
+                    }
+                );
+            }
+        }
+
+        function finishLevel2() {
+            playSound('levelup');
+            showFeedbackModal(
+                true,
+                `BENTENG PERTAHANAN TERBANGUN PENUH!`,
+                `Seluruh 6 lapis pertahanan siber telah terpasang. Selanjutnya, bersiaplah di Pusat Komando Tanggap Insiden!`,
+                () => {
+                    initLevel3();
+                }
+            );
+        }
+
+        /* ==========================================================================
+           8. LOGIKA LEVEL 3: TANGGAP INSIDEN (URUTKAN KARTU & 5 SOAL KANAL PELAPORAN)
+           ========================================================================== */
+        function initLevel3() {
+            gameState.currentLevel = 3;
+            updateHUD();
+            showScreen('screen-level3');
+
+            // Gabungkan 4 simulasi pengurutan indikasi insiden (acak) + 5 soal pilihan ganda kanal pelaporan (acak)
+            const orderingTasks = shuffleArray(INCIDENT_INDICATIONS_LV3).map(ind => ({
+                type: 'ordering',
+                data: ind
+            }));
+            const quizTasks = shuffleArray(REPORTING_QUIZ_LV3).map(q => ({
+                type: 'mcq',
+                data: q
+            }));
+
+            gameState.lv3Tasks = [...orderingTasks, ...quizTasks];
+            gameState.lv3Index = 0;
+
+            loadLevel3Task();
+        }
+
+        function loadLevel3Task() {
+            if (gameState.lv3Index >= gameState.lv3Tasks.length) {
+                finishGameMission();
+                return;
+            }
+
+            const currentTask = gameState.lv3Tasks[gameState.lv3Index];
+            document.getElementById('lv3-progress').textContent = `Tahap: ${gameState.lv3Index + 1} / ${gameState.lv3Tasks.length}`;
+
+            const area = document.getElementById('lv3-interactive-area');
+            area.innerHTML = '';
+
+            if (currentTask.type === 'ordering') {
+                document.getElementById('lv3-monitor-type').textContent = currentTask.data.title;
+                document.getElementById('lv3-prompt-text').textContent = currentTask.data.prompt;
+
+                // Acak urutan 4 kartu tindakan (pastikan tidak langsung berurutan 1-2-3-4)
+                let shuffledSteps = shuffleArray(ORDERED_RESPONSE_STEPS_LV3);
+                if (shuffledSteps.every((s, idx) => s.order === idx + 1)) {
+                    [shuffledSteps[0], shuffledSteps[1]] = [shuffledSteps[1], shuffledSteps[0]];
+                }
+                gameState.lv3CurrentSeqOrder = shuffledSteps;
+                gameState.lv3SelectedSwapIdx = null;
+
+                renderLevel3SortableCards();
+            } else {
+                document.getElementById('lv3-monitor-type').textContent = 'KANAL PELAPORAN RESMI & PROSEDUR CSIRT';
+                document.getElementById('lv3-prompt-text').textContent = currentTask.data.question;
+
+                // Acak pilihan ganda
+                const indexedOptions = currentTask.data.options.map((text, idx) => ({
+                    text,
+                    isCorrect: idx === currentTask.data.correctIndex
+                }));
+                const shuffledOpts = shuffleArray(indexedOptions);
+
+                const grid = document.createElement('div');
+                grid.className = 'mcq-options-grid';
+
+                const letters = ['A', 'B', 'C', 'D'];
+                shuffledOpts.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-mcq-option';
+                    btn.innerHTML = `
+                        <span class="mcq-letter">${letters[i]}</span>
+                        <span>${opt.text}</span>
+                    `;
+                    btn.addEventListener('click', () => handleLevel3MCQAnswer(opt.isCorrect, currentTask.data.explanation));
+                    grid.appendChild(btn);
+                });
+
+                area.appendChild(grid);
+            }
+        }
+
+        function renderLevel3SortableCards() {
+            const area = document.getElementById('lv3-interactive-area');
+            area.innerHTML = '';
+
+            const hint = document.createElement('p');
+            hint.style.fontSize = '12px';
+            hint.style.color = 'var(--bright-cyan)';
+            hint.style.fontWeight = '700';
+            hint.style.marginBottom = '8px';
+            hint.textContent = 'Gunakan tombol panah ⬆️⬇️ atau ketuk 2 kartu untuk menukar urutan (Langkah 1 sampai 4):';
+            area.appendChild(hint);
+
+            const container = document.createElement('div');
+            container.className = 'sortable-cards-container';
+
+            gameState.lv3CurrentSeqOrder.forEach((item, index) => {
+                const card = document.createElement('div');
+                const isSelected = gameState.lv3SelectedSwapIdx === index;
+                card.className = `seq-card ${isSelected ? 'selected-swap' : ''}`;
+
+                card.innerHTML = `
+                    <div class="seq-num-badge">${index + 1}</div>
+                    <div class="seq-card-text">${item.text}</div>
+                    <div class="seq-controls">
+                        <button type="button" class="btn-seq-move" ${index === 0 ? 'disabled' : ''} aria-label="Pindah ke atas">⬆️</button>
+                        <button type="button" class="btn-seq-move" ${index === gameState.lv3CurrentSeqOrder.length - 1 ? 'disabled' : ''} aria-label="Pindah ke bawah">⬇️</button>
+                    </div>
+                `;
+
+                // Klik teks kartu untuk tukar posisi dengan cepat di layar sentuh
+                card.querySelector('.seq-card-text').addEventListener('click', () => {
+                    playSound('click');
+                    if (gameState.lv3SelectedSwapIdx === null) {
+                        gameState.lv3SelectedSwapIdx = index;
+                    } else if (gameState.lv3SelectedSwapIdx === index) {
+                        gameState.lv3SelectedSwapIdx = null;
+                    } else {
+                        const a = gameState.lv3SelectedSwapIdx;
+                        const b = index;
+                        [gameState.lv3CurrentSeqOrder[a], gameState.lv3CurrentSeqOrder[b]] = [gameState.lv3CurrentSeqOrder[b], gameState.lv3CurrentSeqOrder[a]];
+                        gameState.lv3SelectedSwapIdx = null;
+                    }
+                    renderLevel3SortableCards();
+                });
+
+                const btns = card.querySelectorAll('.btn-seq-move');
+                btns[0].addEventListener('click', () => moveSeqCard(index, -1));
+                btns[1].addEventListener('click', () => moveSeqCard(index, 1));
+
+                container.appendChild(card);
+            });
+
+            area.appendChild(container);
+
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'btn btn-primary';
+            submitBtn.style.width = '100%';
+            submitBtn.style.marginTop = '12px';
+            submitBtn.innerHTML = '✅ KONFIRMASI URUTAN TINDAKAN';
+            submitBtn.addEventListener('click', verifyLevel3Ordering);
+            area.appendChild(submitBtn);
+        }
+
+        function moveSeqCard(index, direction) {
+            const target = index + direction;
+            if (target < 0 || target >= gameState.lv3CurrentSeqOrder.length) return;
+            playSound('click');
+            [gameState.lv3CurrentSeqOrder[index], gameState.lv3CurrentSeqOrder[target]] = [gameState.lv3CurrentSeqOrder[target], gameState.lv3CurrentSeqOrder[index]];
+            gameState.lv3SelectedSwapIdx = null;
+            renderLevel3SortableCards();
+        }
+
+        function verifyLevel3Ordering() {
+            if (gameState.isPaused) return;
+            const isAllCorrect = gameState.lv3CurrentSeqOrder.every((item, idx) => item.order === idx + 1);
+            const fullSequenceExplanation = 'Urutan Tanggap Insiden: (1) Jangan hapus bukti/mengubah apa pun yang menghilangkan jejak, (2) Amankan bukti awal, (3) Catat identitas pelapor, kronologi & dampak layanan, (4) Laporkan ke petugas/TTIS & koordinasikan lewat kanal resmi.';
+
+            if (isAllCorrect) {
+                playSound('correct');
+                gameState.score += 150;
+                updateHUD();
+
+                showFeedbackModal(
+                    true,
+                    `PROSEDUR KOMANDO TEPAT! (+150 Poin)`,
+                    fullSequenceExplanation,
+                    () => {
+                        gameState.lv3Index++;
+                        loadLevel3Task();
+                    }
+                );
+            } else {
+                playSound('wrong');
+                gameState.shields = Math.max(0, gameState.shields - 1);
+                gameState.mistakesReview.add(fullSequenceExplanation);
+                updateHUD();
+
+                showFeedbackModal(
+                    false,
+                    `URUTAN PROSEDUR BELUM TEPAT!`,
+                    fullSequenceExplanation,
+                    () => {
+                        gameState.lv3Index++;
+                        loadLevel3Task();
+                    }
+                );
+            }
+        }
+
+        function handleLevel3MCQAnswer(isCorrect, explanation) {
+            if (gameState.isPaused) return;
+            if (isCorrect) {
+                playSound('correct');
+                gameState.score += 100;
+                updateHUD();
+
+                showFeedbackModal(
+                    true,
+                    `KANAL PELAPORAN TEPAT! (+100 Poin)`,
+                    explanation,
+                    () => {
+                        gameState.lv3Index++;
+                        loadLevel3Task();
+                    }
+                );
+            } else {
+                playSound('wrong');
+                gameState.shields = Math.max(0, gameState.shields - 1);
+                gameState.mistakesReview.add(`Kanal Pelaporan: ${explanation}`);
+                updateHUD();
+
+                showFeedbackModal(
+                    false,
+                    `JAWABAN KURANG TEPAT!`,
+                    explanation,
+                    () => {
+                        gameState.lv3Index++;
+                        loadLevel3Task();
+                    }
+                );
+            }
+        }
+
+        /* ==========================================================================
+           9. LAYAR HASIL AKHIR, BINTANG, DAN LENCANA
+           ========================================================================== */
+        function finishGameMission() {
+            stopGlobalTimer();
+            playSound('levelup');
+            showScreen('screen-result');
+
+            document.getElementById('res-player-greeting').textContent = `MISI TUNTAS, ${gameState.playerName.toUpperCase()}!`;
+            document.getElementById('res-final-score').textContent = gameState.score;
+            document.getElementById('res-final-shields').textContent = `${gameState.shields} / ${gameState.maxShields}`;
+            document.getElementById('res-final-time').textContent = document.getElementById('hud-timer').textContent;
+
+            // Hitung Bintang (1 - 3) dan Lencana ("Penjaga Siber" / "Pelindung Data" / "Komandan Siaga")
+            let starsCount = 1;
+            let badgeTitle = 'PENJAGA SIBER';
+
+            if (gameState.score >= 2100 && gameState.shields >= 4) {
+                starsCount = 3;
+                badgeTitle = 'KOMANDAN SIAGA';
+            } else if (gameState.score >= 1400 && gameState.shields >= 2) {
+                starsCount = 2;
+                badgeTitle = 'PELINDUNG DATA';
+            }
+
+            document.getElementById('res-badge-name').textContent = badgeTitle;
+
+            const starEls = document.querySelectorAll('#res-stars-row .star-item');
+            starEls.forEach((star, idx) => {
+                star.classList.remove('earned');
+                if (idx < starsCount) {
+                    setTimeout(() => {
+                        star.classList.add('earned');
+                    }, idx * 220);
+                }
+            });
+
+            // Tampilkan ringkasan poin yang perlu dipelajari lagi
+            const reviewList = document.getElementById('res-review-list');
+            reviewList.innerHTML = '';
+
+            if (gameState.mistakesReview.size === 0) {
+                const li = document.createElement('li');
+                li.style.color = 'var(--safe-green)';
+                li.style.fontWeight = '700';
+                li.textContent = 'Sempurna! Anda telah menguasai seluruh materi Kenali Ancaman, Pasang Pertahanan, serta Tanggap Insiden & Kanal Pelaporan Resmi (https://respon.kemendikdasmen.go.id dan Gov-CSIRT BSSN).';
+                reviewList.appendChild(li);
+            } else {
+                gameState.mistakesReview.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    reviewList.appendChild(li);
+                });
+            }
+        }
+
+        /* ==========================================================================
+           10. INISIALISASI EVENT TOMBOL & ANIMASI KANVAS LATAR BELAKANG
+           ========================================================================== */
+        function startNewGame() {
+            playSound('click');
+            const nameInput = document.getElementById('input-player-name').value.trim();
+            gameState.playerName = nameInput || 'Petugas Siaga Siber';
+            gameState.score = 0;
+            gameState.shields = 5;
+            gameState.elapsedSeconds = 0;
+            gameState.isPaused = false;
+            gameState.mistakesReview.clear();
+            document.getElementById('hud-timer').textContent = '00:00';
+
+            startGlobalTimer();
+            initLevel1();
+        }
+
+        document.getElementById('btn-start-game').addEventListener('click', startNewGame);
+        document.getElementById('btn-play-again').addEventListener('click', startNewGame);
+
+        document.getElementById('btn-how-to-play').addEventListener('click', () => {
+            playSound('click');
+            document.getElementById('modal-howto').classList.add('open');
+        });
+
+        function closeHowToModal() {
+            playSound('click');
+            document.getElementById('modal-howto').classList.remove('open');
+        }
+
+        // Animasi Partikel Data Siber Halus pada Background Canvas
+        function initCyberBackgroundCanvas() {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const particles = Array.from({ length: 38 }, () => ({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.45,
+                vy: (Math.random() - 0.5) * 0.45,
+                r: Math.random() * 2 + 1
+            }));
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if (p.x < 0) p.x = width;
+                    if (p.x > width) p.x = 0;
+                    if (p.y < 0) p.y = height;
+                    if (p.y > height) p.y = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(0, 210, 255, 0.35)';
+                    ctx.fill();
+
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const dx = p.x - p2.x;
+                        const dy = p.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 130) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.strokeStyle = `rgba(0, 150, 255, ${0.12 * (1 - dist / 130)})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        // Jalankan saat halaman selesai dimuat
+        window.onload = function() {
+            loadSavedLogos();
+            initCyberBackgroundCanvas();
+        };
+    </script>
+</body>
+</html>
